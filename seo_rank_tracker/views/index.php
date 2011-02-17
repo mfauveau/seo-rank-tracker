@@ -19,7 +19,7 @@ echo form_open($form_action);
 			</div>
 			<div id="new-rank-right">
 				<?
-				$default_val = get_cookie('search_engine');
+				$default_val = get_cookie('search_engine_'.$site_id);
 				if($this->input->post('search_engine')) {
 					$default_val = $this->input->post('search_engine');
 				}

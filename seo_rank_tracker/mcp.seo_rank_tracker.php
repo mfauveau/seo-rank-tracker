@@ -99,10 +99,10 @@ class Seo_rank_tracker_mcp {
 			
 			$this->rank_track_now($q, $url, $search_engine);
 			
-			$this->EE->functions->set_cookie('search_engine', $search_engine);
+			$this->EE->functions->set_cookie('search_engine_'.$this->data['site_id'], $search_engine);
 			
 			$cookie = array(
-				'name'   => 'search_engine',
+				'name'   => 'search_engine_'.$this->data['site_id'],
 				'value'  => $search_engine,
 				'expire' => '0',
 				'path'   => '/',

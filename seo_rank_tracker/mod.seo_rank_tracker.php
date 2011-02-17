@@ -27,31 +27,66 @@ class Seo_rank_tracker {
 		
 		
 		$this->data['search_engines'] = array(
-			'google-fr' => array('Google France', "http://www.google.fr/"),
 			'google-us' => array('Google US', "http://www.google.com/"),
-			'google-es' => array('Google Espagne', "http://www.google.es/"),
-			'google-it' => array('Google Italie', "http://www.google.it/"),
+			'google-de' => array('Google Germany', "http://google.de/"),
+			'google-be' => array('Google Belgium', "http://google.be/"),
+			'google-es' => array('Google Spain', "http://www.google.es/"),
+			'google-fr' => array('Google France', "http://www.google.fr/"),
+			'google-nl' => array('Google Holland', "http://google.nl/"),
+			'google-it' => array('Google Italy', "http://www.google.it/"),
+			'google-pt' => array('Google Portugal', "http://google.pt/"),
+			'google-ch' => array('Google Swiss', "http://google.ch/"),
+			'google-cn' => array('Google China', "http://google.cn/"),
+			'google-jp' => array('Google Japan', "http://google.jp/"),
+			'google-mx' => array('Google Mexico', "http://google.com.mx/"),
+			'google-ca' => array('Google Canada', "http://google.ca/"),
+			'google-uk' => array('Google United Kingdom', "http://google.co.uk/")
 		);
+		
+		$this->data['search_engines_dropdown'] = array();
+		foreach($this->data['search_engines'] as $k => $v) {
+			$this->data['search_engines_dropdown'][$k] = $v[0];	
+		}
+		
+		
+
+		// Get current site	
+		$this->data['site_id'] = $this->EE->config->item('site_id');
 	}
 	
 	
 	function tracker_cron() {
 		/* lancer un rafraichissement complet */
 
-		$ranks = array();
+		$this->EE->load->model('site_model');
+		$query = $this->EE->site_model->get_site();
 
-		$this->EE->db->order_by('date', 'desc');
-		$this->EE->db->group_by(array("search_engine", "keywords"));
-		$query = $this->EE->db->get('seo_rank');
-		
-		if($query->num_rows() > 0) {
-		
-			$result = $query->result();
-			foreach($result as $r) {
+		foreach ($query->result() as $site)
+		{
+			echo $site->site_id;
 				
-				$this->rank_track_now($r->keywords, $r->url, $r->search_engine);
+			$ranks = array();
+	
+			$this->EE->db->where('site_id', $site->site_id);
+			$this->EE->db->order_by('date', 'desc');
+			$this->EE->db->group_by(array("search_engine", "keywords"));
+			$query = $this->EE->db->get('seo_rank');
+			
+			if($query->num_rows() > 0) {
+			
+				$result = $query->result();
+				foreach($result as $r) {
+					
+					$this->rank_track_now($r->keywords, $r->url, $r->search_engine, $site->site_id);
+				}
 			}
 		}
+
+
+		
+		
+
+
 
 
 
@@ -60,10 +95,13 @@ class Seo_rank_tracker {
 	
 
 	
-	function rank_track_now($keywords, $url, $search_engine) {
-	
+	function rank_track_now($keywords, $url, $search_engine, $site_id) {
+		$this->EE->load->model('site_model');
+		$query = $this->EE->site_model->get_site_system_preferences($site_id);
+		$prefs = unserialize(base64_decode($query->row('site_system_preferences')));
+		
 		$this->rank_website = $this->EE->config->item('site_url');
-		$this->rank_website = "http://dukt.fr/";
+		$this->rank_website = $prefs['site_url'];
 		$this->rank_keyword="";
 		$this->rank_url = "";
 		$this->rank_search_engine = $search_engine;
