@@ -21,34 +21,17 @@ class Seo_rank_tracker {
 	function Seo_rank_tracker()
 	{
 		$this->EE =& get_instance();
+		$this->EE->load->model('seo_rank_tracker_model');
 		
 		$out = "";
 		$this->return_data = $out;
-		
-		
-		$this->data['search_engines'] = array(
-			'google-us' => array('Google US', "http://www.google.com/"),
-			'google-de' => array('Google Germany', "http://google.de/"),
-			'google-be' => array('Google Belgium', "http://google.be/"),
-			'google-es' => array('Google Spain', "http://www.google.es/"),
-			'google-fr' => array('Google France', "http://www.google.fr/"),
-			'google-nl' => array('Google Holland', "http://google.nl/"),
-			'google-it' => array('Google Italy', "http://www.google.it/"),
-			'google-pt' => array('Google Portugal', "http://google.pt/"),
-			'google-ch' => array('Google Swiss', "http://google.ch/"),
-			'google-cn' => array('Google China', "http://google.cn/"),
-			'google-jp' => array('Google Japan', "http://google.jp/"),
-			'google-mx' => array('Google Mexico', "http://google.com.mx/"),
-			'google-ca' => array('Google Canada', "http://google.ca/"),
-			'google-uk' => array('Google United Kingdom', "http://google.co.uk/")
-		);
+
+		$this->data['search_engines'] = $this->EE->seo_rank_tracker_model->get_search_engines();
 		
 		$this->data['search_engines_dropdown'] = array();
 		foreach($this->data['search_engines'] as $k => $v) {
 			$this->data['search_engines_dropdown'][$k] = $v[0];	
 		}
-		
-		
 
 		// Get current site	
 		$this->data['site_id'] = $this->EE->config->item('site_id');

@@ -27,22 +27,9 @@ class Seo_rank_tracker_mcp {
 		$this->data = array();
 		$this->base_url = BASE.AMP.'C=addons_modules'.AMP.'M=show_module_cp'.AMP.'module=seo_rank_tracker';
 		
-		$this->data['search_engines'] = array(
-			'google-us' => array('Google US', "http://www.google.com/"),
-			'google-de' => array('Google Germany', "http://google.de/"),
-			'google-be' => array('Google Belgium', "http://google.be/"),
-			'google-es' => array('Google Spain', "http://www.google.es/"),
-			'google-fr' => array('Google France', "http://www.google.fr/"),
-			'google-nl' => array('Google Holland', "http://google.nl/"),
-			'google-it' => array('Google Italy', "http://www.google.it/"),
-			'google-pt' => array('Google Portugal', "http://google.pt/"),
-			'google-ch' => array('Google Swiss', "http://google.ch/"),
-			'google-cn' => array('Google China', "http://google.cn/"),
-			'google-jp' => array('Google Japan', "http://google.jp/"),
-			'google-mx' => array('Google Mexico', "http://google.com.mx/"),
-			'google-ca' => array('Google Canada', "http://google.ca/"),
-			'google-uk' => array('Google United Kingdom', "http://google.co.uk/")
-		);
+		$this->EE->load->model('seo_rank_tracker_model');
+		
+		$this->data['search_engines'] = $this->EE->seo_rank_tracker_model->get_search_engines();
 		
 		$this->data['search_engines_dropdown'] = array();
 		foreach($this->data['search_engines'] as $k => $v) {

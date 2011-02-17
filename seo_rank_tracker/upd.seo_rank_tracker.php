@@ -14,7 +14,7 @@
 
 class Seo_rank_tracker_upd {
 
-	var $version = '1.0b1';
+	var $version = '1.0b3';
 	
 	function Seo_rank_tracker_upd()
 	{
@@ -52,6 +52,7 @@ class Seo_rank_tracker_upd {
 													'constraint'	 => '10',
 													'unsigned'		 => TRUE,
 													'auto_increment' => TRUE),
+						'site_id'		=> array('type' => 'int', 'constraint' => '10'),
 						'keywords'		=> array('type' => 'text'),
 						'url'			=> array('type' => 'text'),
 						'rank'			=> array('type' 		 => 'int',
